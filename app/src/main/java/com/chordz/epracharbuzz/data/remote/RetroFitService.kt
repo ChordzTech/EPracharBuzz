@@ -11,12 +11,14 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface RetroFitService {
-
+    @Headers("Accept: application/json")
     @GET("/getMessagebyCode/{a_contactno}/")
-    suspend fun getdetailsListByContact(
+    suspend fun getdetailsListByContact(@Header("Accept") accept:String,
         @Path(value = "a_contactno") a_contactno: String
     ): Response<ElectionMessageResponse>
 
@@ -34,6 +36,7 @@ interface RetroFitService {
             httpClientBuilder.addInterceptor(Interceptor { chain ->
                 val requestBuilder: Request.Builder = chain.request().newBuilder()
                 requestBuilder.header("Content-Type", "application/json")
+                requestBuilder.header("Accept", "application/json")
                 chain.proceed(requestBuilder.build())
             })
 
@@ -45,7 +48,6 @@ interface RetroFitService {
 
                 val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .client(getLogger())
                     .client(httpClientBuilder.build()).build()
                 retrofitService = retrofit.create(RetroFitService::class.java)
             }

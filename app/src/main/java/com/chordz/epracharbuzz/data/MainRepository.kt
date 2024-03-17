@@ -7,7 +7,7 @@ import com.chordz.epracharbuzz.data.response.ElectionMessageResponse
 class MainRepository constructor(private val retroFitService: RetroFitService) {
 
     suspend fun getElectionDetailsMsgByContact(a_contactno:String): NetworkState<ElectionMessageResponse> {
-        val response = retroFitService.getdetailsListByContact(a_contactno)
+        val response = retroFitService.getdetailsListByContact("application/json",a_contactno)
         return if (response.isSuccessful) {
             val responseBody = response.body()
             if (responseBody != null) {
