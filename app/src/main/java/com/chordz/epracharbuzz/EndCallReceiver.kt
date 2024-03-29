@@ -14,6 +14,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.chordz.epracharbuzz.data.ElectionDataHolder.msgDetails
 import com.chordz.epracharbuzz.MainActivity
+import com.chordz.epracharbuzz.preferences.AppPreferences
+import com.chordz.epracharbuzz.preferences.AppPreferences.getBooleanValueFromSharedPreferences
 
 class EndCallReceiver : BroadcastReceiver() {
     private var serviceManager: AccessibilityServiceManager? = null
@@ -62,12 +64,14 @@ class EndCallReceiver : BroadcastReceiver() {
         )
         textView.text = "E-Prachar"
         ly1!!.addView(textView)
-        ly1!!.setOnClickListener { v -> //                openWhatsApp(context, phoneNumber);
-            val intent = Intent(ly1!!.context, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra("PHONE_NUMBER", phoneNumber)
-            v.context.startActivity(intent)
-            wm!!.removeView(ly1)
+        if (getBooleanValueFromSharedPreferences(AppPreferences.WHATSAPP_ON_OFF)) {
+            ly1!!.setOnClickListener { v -> //                openWhatsApp(context, phoneNumber);
+                val intent = Intent(ly1!!.context, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.putExtra("PHONE_NUMBER", phoneNumber)
+                v.context.startActivity(intent)
+                wm!!.removeView(ly1)
+            }
         }
         ly1!!.orientation = LinearLayout.VERTICAL
         wm!!.addView(ly1, params1)
