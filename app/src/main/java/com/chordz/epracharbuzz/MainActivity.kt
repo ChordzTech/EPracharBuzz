@@ -151,7 +151,6 @@ class MainActivity : AppCompatActivity() {
 //        finishAffinity()
 
 
-
         try {
             val toNumber = phoneNumber.replace("+", "").replace(" ", "")
             // Check if the phoneNumber starts with "+91", if not, prepend "+91"
