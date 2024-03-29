@@ -32,7 +32,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
-import com.chordz.epracharbuzz.DateUtils
 import com.chordz.epracharbuzz.data.ElectionDataHolder
 import com.chordz.epracharbuzz.data.ElectionDataHolder.msgDetails
 import com.chordz.epracharbuzz.data.MainRepository
@@ -151,10 +150,16 @@ class MainActivity : AppCompatActivity() {
 //        startActivity(shareIntent)
 //        finishAffinity()
 
-        try{
+        try {
             val toNumber = phoneNumber.replace("+", "").replace(" ", "")
+            // Check if the phoneNumber starts with "+91", if not, prepend "+91"
+            val formattedNumber = if (!phoneNumber.startsWith("+91")) {
+                "91$toNumber"
+            } else {
+                toNumber
+            }
             val sentIntent = Intent("android.intent.action.MAIN")
-            sentIntent.putExtra("jid", "$toNumber@s.whatsapp.net")
+            sentIntent.putExtra("jid", "$formattedNumber@s.whatsapp.net")
             sentIntent.putExtra(
                 Intent.EXTRA_STREAM,
                 getBitmapUriFromBitmap(this@MainActivity, image)
@@ -167,7 +172,7 @@ class MainActivity : AppCompatActivity() {
             sentIntent.setType("image/*")
             startActivity(sentIntent)
             finishAffinity()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Toast.makeText(this, "App not installed", Toast.LENGTH_SHORT).show()
         }
     }
